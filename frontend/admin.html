@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JalSetu | Admin Dashboard</title>
+<style>
+:root {
+  --navy:#102a43; --blue:#087eae; --cyan:#dff5fb;
+  --bg:#f3f7fb; --white:#fff; --text:#243b53;
+  --muted:#627d98; --border:#e1eaf1; --green:#16805d;
+  --orange:#a45b00; --red:#b42318;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--navy);color:white;padding:18px 5%;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{background:#12a8c7;border-radius:12px;width:44px;height:44px;
+  display:grid;place-items:center;font-size:24px}
+header h1{font-size:21px;margin:0}
+header p{margin:2px 0 0;color:#c9e6f3;font-size:13px}
+button,select,input{font:inherit}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;
+  font-weight:650}
+.btn-light{background:white;color:var(--navy)}
+.btn-primary{background:var(--blue);color:white}
+.btn-primary:disabled{opacity:.55;cursor:wait}
+main{max-width:1400px;margin:auto;padding:30px 5% 55px}
+.eyebrow{color:var(--blue);font-weight:750;text-transform:uppercase;
+  letter-spacing:1.4px;font-size:12px}
+h2{margin:4px 0;font-size:29px;color:var(--navy)}
+.sub{margin:0;color:var(--muted)}
+.topline{display:flex;justify-content:space-between;align-items:center;
+  gap:18px;flex-wrap:wrap;margin-bottom:25px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:15px;margin-bottom:28px}
+.stat{background:white;border:1px solid var(--border);border-radius:15px;
+  padding:20px;box-shadow:0 3px 12px #102a4308}
+.stat-label{font-size:13px;color:var(--muted)}
+.stat-value{font-size:31px;font-weight:800;color:var(--navy);margin-top:8px}
+.stat-icon{font-size:21px;margin-bottom:9px}
+.panel{background:white;border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;box-shadow:0 3px 12px #102a4308}
+.panel-head{padding:22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.panel-head h3{margin:0;color:var(--navy);font-size:19px}
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+input,select{border:1px solid #cbd8e3;border-radius:9px;padding:11px 12px;
+  background:white;color:var(--text);min-width:160px;max-width:100%}
+input:focus,select:focus{outline:2px solid #8bd8ed;outline-offset:1px}
+#search{min-width:240px}
+.notice{margin-bottom:20px;border-radius:10px;padding:13px 16px;
+  background:#e5f5fc;color:#075985}
+.notice.error{background:#fff0ef;color:#9b1c1c}
+.notice[hidden]{display:none}
+.results{padding:17px 22px;color:var(--muted);font-size:13px;
+  border-bottom:1px solid var(--border)}
+.complaints{padding:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px}
+.complaint{border:1px solid var(--border);border-radius:13px;padding:19px;
+  min-width:0}
+.complaint-top{display:flex;justify-content:space-between;align-items:flex-start;
+  gap:12px}
+.ref{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.complaint h4{margin:7px 0 9px;font-size:18px;color:var(--navy);
+  overflow-wrap:anywhere}
+.status{display:inline-block;border-radius:30px;padding:5px 10px;
+  font-size:12px;font-weight:750;white-space:nowrap}
+.status.pending{background:#fff2d7;color:#8a5200}
+.status.in-progress{background:#dff3ff;color:#075985}
+.status.resolved{background:#dff7e9;color:#166534}
+.description{color:#486581;margin:10px 0 15px;overflow-wrap:anywhere;
+  white-space:pre-wrap}
+.details{display:grid;grid-template-columns:1fr 1fr;gap:11px;
+  padding:14px 0;border-top:1px solid var(--border)}
+.detail-label{font-size:11px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.5px}
+.detail-value{font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.reporter{background:#f4f8fb;border-radius:9px;padding:12px;margin:3px 0 14px;
+  overflow-wrap:anywhere}
+.reporter strong{display:block;font-size:13px}
+.reporter span{font-size:12px;color:var(--muted)}
+.update-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.update-row select{flex:1;min-width:130px}
+.empty{grid-column:1/-1;text-align:center;padding:50px 15px;color:var(--muted)}
+.loading{padding:35px;text-align:center;color:var(--muted)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:12px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){
+  header{padding:15px 4%}main{padding:22px 4% 40px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .stat{padding:15px}.stat-value{font-size:26px}
+  .complaints{grid-template-columns:1fr;padding:12px}
+  .panel-head{padding:16px}
+  #search{min-width:0;width:100%}
+  .filters{width:100%}.filters select{flex:1;min-width:0}
+  h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true">💧</div>
+    <div><h1>JalSetu</h1><p>Water Supply Management · Administration</p></div>
+  </div>
+  <button class="btn-light" id="logout">Log out</button>
+</header>
+
+<main>
+  <div class="topline">
+    <div>
+      <div class="eyebrow">Administration</div>
+      <h2>Dashboard overview</h2>
+      <p class="sub">Monitor complaints and manage water service requests.</p>
+    </div>
+    <button class="btn-primary" id="refresh">↻ Refresh data</button>
+  </div>
+
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <section class="stats" aria-label="Live dashboard statistics">
+    <div class="stat"><div class="stat-icon">📋</div>
+      <div class="stat-label">Total complaints</div><div class="stat-value" id="total">—</div></div>
+    <div class="stat"><div class="stat-icon">🕒</div>
+      <div class="stat-label">Pending</div><div class="stat-value" id="pending">—</div></div>
+    <div class="stat"><div class="stat-icon">🔧</div>
+      <div class="stat-label">In progress</div><div class="stat-value" id="progress">—</div></div>
+    <div class="stat"><div class="stat-icon">✓</div>
+      <div class="stat-label">Resolved</div><div class="stat-value" id="resolved">—</div></div>
+    <div class="stat"><div class="stat-icon">👥</div>
+      <div class="stat-label">Registered users</div><div class="stat-value" id="users">—</div></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h3>Complaint management</h3>
+        <p class="sub">Review reports and update their status.</p></div>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Search complaints or reporters…" aria-label="Search complaints">
+        <select id="statusFilter" aria-label="Filter by status">
+          <option value="">All statuses</option>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Resolved</option>
+        </select>
+      </div>
+    </div>
+    <div class="results" id="resultCount">Loading complaints…</div>
+    <div id="complaints" class="complaints">
+      <div class="loading">Connecting to JalSetu…</div>
+    </div>
+  </section>
+</main>
+<footer>JalSetu Administration · Live data from the application database</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const API = "http://localhost:5000/api";
+  const token = sessionStorage.getItem("jalsetu_token");
+  const savedUser = sessionStorage.getItem("jalsetu_user");
+  const notice = document.getElementById("notice");
+  const list = document.getElementById("complaints");
+  const count = document.getElementById("resultCount");
+  let complaints = [];
+  let busy = false;
+
+  function message(text, error = false) {
+    notice.textContent = text;
+    notice.className = error ? "notice error" : "notice";
+    notice.hidden = !text;
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    })[char]);
+  }
+
+  function statusClass(status) {
+    const value = String(status || "").toLowerCase();
+    if (value === "resolved") return "resolved";
+    if (value === "in progress") return "in-progress";
+    return "pending";
+  }
+
+  function dateText(value) {
+    if (!value) return "Not available";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? String(value) :
+      date.toLocaleString(undefined, {dateStyle:"medium", timeStyle:"short"});
+  }
+
+  async function api(path, options = {}) {
+    const response = await fetch(API + path, {
+      ...options,
+      headers: {
+        ...(options.body ? {"Content-Type":"application/json"} : {}),
+        "Authorization": "Bearer " + (sessionStorage.getItem("jalsetu_token") || ""),
+        ...(options.headers || {})
+      }
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 422) {
+        message("Your login session is invalid or expired. Please log in again.", true);
+      } else if (response.status === 403) {
+        message("Administrator access required. Sign in with your admin account.", true);
+      }
+      throw new Error(data.error || `Request failed (${response.status}).`);
+    }
+    return data;
+  }
+
+  function showLoginProblem(text) {
+    message(text, true);
+    list.innerHTML = '<div class="empty">Admin data is unavailable. Log in through the main JalSetu page with your administrator account, then open this dashboard again.</div>';
+    count.textContent = "Access not verified";
+  }
+
+  function renderComplaints() {
+    const query = document.getElementById("search").value.trim().toLowerCase();
+    const selectedStatus = document.getElementById("statusFilter").value.toLowerCase();
+
+    const filtered = complaints.filter(c => {
+      const reporter = c.reporter || {};
+      const searchable = [
+        c.reference_number, c.title, c.description, c.category, c.location_text,
+        c.status, reporter.full_name, reporter.email
+      ].join(" ").toLowerCase();
+      return searchable.includes(query) &&
+        (!selectedStatus || String(c.status || "").toLowerCase() === selectedStatus);
+    });
+
+    count.textContent = `Showing ${filtered.length} of ${complaints.length} complaints`;
+    if (!filtered.length) {
+      list.innerHTML = '<div class="empty">No complaints match your search or filter.</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(c => {
+      const reporter = c.reporter || {};
+      const current = ["Pending","In Progress","Resolved"].includes(c.status) ? c.status : "Pending";
+      const options = ["Pending","In Progress","Resolved"].map(s =>
+        `<option value="${s}" ${current === s ? "selected" : ""}>${s}</option>`
+      ).join("");
+      return `
+        <article class="complaint">
+          <div class="complaint-top">
+            <div>
+              <div class="ref">Reference: ${escapeHTML(c.reference_number || "—")}</div>
+              <h4>${escapeHTML(c.title || "Untitled complaint")}</h4>
+            </div>
+            <span class="status ${statusClass(c.status)}">${escapeHTML(c.status || "Unknown")}</span>
+          </div>
+          <p class="description">${escapeHTML(c.description || "No description provided.")}</p>
+          ${c.image_url ? `<section class="admin-complaint-image" data-image-reference="${escapeHTML(c.reference_number || "")}" style="display:block;width:100%;box-sizing:border-box;margin:16px 0;padding:12px;border:1px solid var(--border);border-radius:12px;background:#f8fafc"><strong style="display:block;margin-bottom:8px;color:var(--navy)">Complaint attachment</strong><span>Loading image…</span></section>` : ""}
+
+          <div class="details">
+            <div><div class="detail-label">Category</div><div class="detail-value">${escapeHTML(c.category || "—")}</div></div>
+            <div><div class="detail-label">Location</div><div class="detail-value">${escapeHTML(c.location_text || "—")}</div></div>
+            <div><div class="detail-label">Submitted</div><div class="detail-value">${escapeHTML(dateText(c.created_at))}</div></div>
+            <div><div class="detail-label">Last updated</div><div class="detail-value">${escapeHTML(dateText(c.updated_at))}</div></div>
+          </div>
+          <div class="reporter">
+            <strong>${escapeHTML(reporter.full_name || "Unknown reporter")}</strong>
+            <span>${escapeHTML(reporter.email || "No email available")}</span>
+          </div>
+          <div class="update-row">
+            <select aria-label="New status for complaint ${escapeHTML(c.reference_number || c.id)}"
+              id="status-${Number(c.id)}">${options}</select>
+            <button class="btn-primary update-btn" data-id="${Number(c.id)}">Update status</button>
+          </div>
+        </article>`;
+    }).join("");
+    loadAdminComplaintImages();
+  }
+
+  // JALSETU_ADMIN_IMAGE_DISPLAY: authenticated complaint evidence renderer.
+  async function loadAdminComplaintImages() {
+    const token = sessionStorage.getItem("jalsetu_token") || "";
+    const containers = list.querySelectorAll(".admin-complaint-image[data-image-reference]");
+
+    await Promise.all(Array.from(containers, async box => {
+      const reference = box.dataset.imageReference;
+      try {
+        const response = await fetch(
+          API + "/admin/complaints/" + encodeURIComponent(reference) + "/image",
+          { headers: { Authorization: "Bearer " + token } }
+        );
+
+        if (!response.ok) {
+          box.textContent = "Attachment could not be loaded (HTTP " + response.status + ").";
+          return;
+        }
+
+        const blob = await response.blob();
+        if (!blob.type.startsWith("image/") || !blob.size) {
+          box.textContent = "The attachment response is not a valid image.";
+          return;
+        }
+
+        const image = document.createElement("img");
+        image.alt = "Uploaded evidence for complaint " + reference;
+        image.style.cssText =
+          "display:block;width:auto;height:auto;max-width:100%;max-height:360px;object-fit:contain;border-radius:8px;background:#fff";
+        image.onload = () => URL.revokeObjectURL(image.src);
+        image.src = URL.createObjectURL(blob);
+
+        const status = document.createElement("div");
+        status.textContent = "Uploaded complaint image";
+        status.style.cssText = "font-size:12px;color:#486581;margin-top:8px";
+
+        box.replaceChildren(box.querySelector("strong") || document.createElement("strong"), image, status);
+        const heading = box.querySelector("strong");
+        heading.textContent = "Complaint attachment";
+        heading.style.cssText = "display:block;margin-bottom:8px;color:var(--navy)";
+      } catch (error) {
+        box.textContent = "Unable to load attachment. Check the backend connection.";
+        console.error("JalSetu attachment error for " + reference, error);
+      }
+    }));
+  }
+
+  async function refreshDashboard() {
+    if (busy) return;
+    busy = true;
+    document.getElementById("refresh").disabled = true;
+    message("");
+    try {
+      const [statsData, complaintData] = await Promise.all([
+        api("/admin/stats"),
+        api("/admin/complaints")
+      ]);
+      const s = statsData.stats || {};
+      document.getElementById("total").textContent = s.total_complaints ?? 0;
+      document.getElementById("pending").textContent = s.pending ?? 0;
+      document.getElementById("progress").textContent = s.in_progress ?? 0;
+      document.getElementById("resolved").textContent = s.resolved ?? 0;
+      document.getElementById("users").textContent = s.total_users ?? 0;
+      complaints = Array.isArray(complaintData.complaints) ? complaintData.complaints : [];
+      renderComplaints();
+    } catch (error) {
+      if (!notice.hidden) {
+        list.innerHTML = '<div class="empty">Could not load admin data. Check that the Flask API is running on port 5000 and your session is valid.</div>';
+        count.textContent = "Unable to load complaints";
+      } else {
+        message(error.message || "Unable to load dashboard data.", true);
+      }
+    } finally {
+      busy = false;
+      document.getElementById("refresh").disabled = false;
+    }
+  }
+
+  list.addEventListener("click", async event => {
+    const button = event.target.closest(".update-btn");
+    if (!button) return;
+    const id = button.dataset.id;
+    const select = document.getElementById("status-" + id);
+    if (!select || button.disabled) return;
+
+    button.disabled = true;
+    button.textContent = "Updating…";
+    try {
+      const data = await api(`/admin/complaints/${encodeURIComponent(id)}/status`, {
+        method:"PATCH",
+        body:JSON.stringify({status:select.value})
+      });
+      message(data.message || "Complaint status updated successfully.");
+      await refreshDashboard();
+    } catch (error) {
+      message(error.message || "Status update failed.", true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Update status";
+    }
+  });
+
+  document.getElementById("search").addEventListener("input", renderComplaints);
+  document.getElementById("statusFilter").addEventListener("change", renderComplaints);
+  document.getElementById("refresh").addEventListener("click", refreshDashboard);
+  document.getElementById("logout").addEventListener("click", () => {
+    sessionStorage.removeItem("jalsetu_token");
+    sessionStorage.removeItem("jalsetu_user");
+    window.location.href = "index.html";
+  });
+
+  if (!token || !savedUser) {
+    showLoginProblem("Please log in through the main JalSetu page first.");
+  } else {
+    try {
+      const user = JSON.parse(savedUser);
+      if (user.role && user.role !== "admin") {
+        showLoginProblem("The saved account is not marked as an administrator. Log in again after confirming your admin role.");
+      } else {
+        refreshDashboard();
+      }
+    } catch {
+      showLoginProblem("Your saved login information is invalid. Log in again.");
+    }
+  }
+})();
+</script>
+</body>
+</html>

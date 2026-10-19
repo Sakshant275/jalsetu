@@ -1,10 +1,11 @@
 from pathlib import Path
+from io import BytesIO
 
 import os
 import re
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from flask_jwt_extended import (
     create_access_token,
@@ -13,6 +14,7 @@ from flask_jwt_extended import (
 )
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
+from PIL import Image, UnidentifiedImageError
 from backend.extensions import db, jwt
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
@@ -188,7 +190,9 @@ def create_app():
                 "complaints": [item.to_dict() for item in items]
             }), 200
 
-        data = request.get_json(silent=True) or {}
+        data = request.form if request.mimetype == "multipart/form-data" else (request.get_json(silent=True) or {})
+        uploaded_image = request.files.get("image") if request.mimetype == "multipart/form-data" else None
+        saved_image_path = None
 
         title = str(data.get("title", "")).strip()
         description = str(data.get("description", "")).strip()
@@ -238,6 +242,38 @@ def create_app():
         except (TypeError, ValueError):
             return jsonify({"error": "Invalid latitude or longitude."}), 400
 
+        # Validate and re-encode an optional image, removing embedded metadata.
+        if uploaded_image and uploaded_image.filename:
+            image_bytes = uploaded_image.read(4 * 1024 * 1024 + 1)
+            if not image_bytes:
+                return jsonify({"error": "The selected image is empty."}), 400
+            if len(image_bytes) > 4 * 1024 * 1024:
+                return jsonify({"error": "Image must be 4 MB or smaller."}), 413
+
+            try:
+                with Image.open(BytesIO(image_bytes)) as probe:
+                    image_format = probe.format
+                    probe.verify()
+
+                extensions = {"JPEG": "jpg", "PNG": "png", "WEBP": "webp"}
+                if image_format not in extensions:
+                    return jsonify({"error": "Use a JPEG, PNG, or WebP image."}), 400
+
+                with Image.open(BytesIO(image_bytes)) as image:
+                    image.load()
+                    if image_format == "JPEG" and image.mode not in ("RGB", "L"):
+                        image = image.convert("RGB")
+
+                    upload_dir = Path(__file__).resolve().parent / "uploads"
+                    upload_dir.mkdir(parents=True, exist_ok=True)
+                    filename = token_hex(16) + "." + extensions[image_format]
+                    saved_image_path = upload_dir / filename
+                    image.save(saved_image_path, format=image_format)
+                    image_url = filename
+
+            except (UnidentifiedImageError, OSError, ValueError, Image.DecompressionBombError):
+                return jsonify({"error": "The uploaded file is not a valid supported image."}), 400
+
         complaint = Complaint(
             reference_number="JS-" + token_hex(5).upper(),
             title=title,
@@ -256,6 +292,8 @@ def create_app():
             db.session.commit()
         except Exception:
             db.session.rollback()
+            if saved_image_path is not None:
+                saved_image_path.unlink(missing_ok=True)
             app.logger.exception("Complaint creation failed")
             return jsonify({"error": "Could not save complaint."}), 500
 
@@ -263,6 +301,43 @@ def create_app():
             "message": "Complaint submitted successfully.",
             "complaint": complaint.to_dict(),
         }), 201
+
+    # JALSETU_IMAGE_UPLOAD_PATCH: authenticated, owner-only image access.
+    @app.get("/api/complaints/<string:reference_number>/image")
+    @jwt_required()
+    def complaint_image(reference_number):
+        from backend.models import Complaint
+
+        user_id = int(get_jwt_identity())
+        complaint = Complaint.query.filter_by(
+            reference_number=reference_number.strip().upper(),
+            user_id=user_id,
+        ).first()
+
+        if not complaint or not complaint.image_url:
+            return jsonify({"error": "Complaint image not found."}), 404
+
+        filename = complaint.image_url
+        allowed_types = {
+            ".jpg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp",
+        }
+        extension = Path(filename).suffix.lower()
+        if Path(filename).name != filename or extension not in allowed_types:
+            return jsonify({"error": "Complaint image not found."}), 404
+
+        image_path = Path(__file__).resolve().parent / "uploads" / filename
+        if not image_path.is_file():
+            return jsonify({"error": "Complaint image not found."}), 404
+
+        return send_file(
+            image_path,
+            mimetype=allowed_types[extension],
+            as_attachment=False,
+            download_name=filename,
+            conditional=True,
+        )
 
     @app.get("/api/complaints/<string:reference_number>")
     @jwt_required()
@@ -329,6 +404,46 @@ def create_app():
             results.append(complaint_data)
 
         return jsonify({"complaints": results}), 200
+
+    # JALSETU_ADMIN_IMAGE_ROUTE: only authenticated administrators can view evidence.
+    @app.get("/api/admin/complaints/<string:reference_number>/image")
+    @jwt_required()
+    def admin_complaint_image(reference_number):
+        from backend.models import Complaint
+
+        admin, error_response = get_admin_user()
+        if error_response:
+            return error_response
+
+        complaint = Complaint.query.filter_by(
+            reference_number=reference_number.strip().upper()
+        ).first()
+
+        if not complaint or not complaint.image_url:
+            return jsonify({"error": "Complaint image not found."}), 404
+
+        filename = complaint.image_url
+        allowed_types = {
+            ".jpg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp",
+        }
+        extension = Path(filename).suffix.lower()
+
+        if Path(filename).name != filename or extension not in allowed_types:
+            return jsonify({"error": "Complaint image not found."}), 404
+
+        image_path = Path(__file__).resolve().parent / "uploads" / filename
+        if not image_path.is_file():
+            return jsonify({"error": "Complaint image file is missing."}), 404
+
+        return send_file(
+            image_path,
+            mimetype=allowed_types[extension],
+            as_attachment=False,
+            download_name=filename,
+            conditional=True,
+        )
 
     @app.patch("/api/admin/complaints/<int:complaint_id>/status")
     @jwt_required()

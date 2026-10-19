@@ -1,0 +1,1721 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#075985">
+  <meta name="description" content="JalSetu — Smart Water Supply Management System for communities.">
+  <title>JalSetu | Smart Water Management</title>
+  <style>
+    :root {
+      --primary: #0b2545;
+      --blue: #087e8b;
+      --aqua: #e5f7f8;
+      --ink: #102a43;
+      --muted: #64748b;
+      --surface: #ffffff;
+      --background: #f4f9fc;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    button, a { font: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 7%;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--aqua);
+      font-size: 24px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .nav a:hover { color: var(--blue); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 17px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button:hover { background: #0c4a6e; }
+
+    .button.secondary {
+      color: var(--primary);
+      background: white;
+      border: 1px solid #bae6fd;
+    }
+
+    .container {
+      width: min(1120px, 88%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 64px 0;
+      background-color: #0b2545;
+      background-image:
+        linear-gradient(90deg, rgba(5, 28, 51, .88) 0%, rgba(5, 45, 68, .68) 58%, rgba(5, 45, 68, .20) 100%),
+        url("https://images.unsplash.com/photo-1439405326854-014607f694d7?auto=format&fit=crop&w=2000&q=85");
+      background-position: center;
+      background-size: cover;
+      color: #ffffff;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(7, 35, 55, .18), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero .eyebrow {
+      background: rgba(255,255,255,.94);
+    }
+
+    .hero h1, .hero h1 span { color: #ffffff; }
+    .hero p { color: #e7f5fb; }
+    .hero .button.secondary {
+      color: #0b2545;
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .card {
+      border: 1px solid #dbe8ee;
+      box-shadow: 0 8px 28px rgba(11,37,69,.045);
+    }
+
+    .brand-icon {
+      color: #087e8b;
+      background: #e5f7f8;
+    }
+
+    .button { transition: background .2s ease, transform .2s ease; }
+    .button:hover { transform: translateY(-1px); }
+
+    .page-note {
+      margin-top: 14px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .topbar { flex-wrap: wrap; padding: 14px 6%; }
+      .nav { gap: 12px; flex-wrap: wrap; }
+      .hero { padding: 58px 0; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: white;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 20px 0 16px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.1;
+      letter-spacing: -1.8px;
+    }
+
+    h1 span { color: var(--blue); }
+
+    .hero p {
+      max-width: 590px;
+      color: #475569;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    section { padding: 42px 0; }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: -0.6px;
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: 0 5px 20px rgb(15 23 42 / 3%);
+    }
+
+    .card-icon {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--aqua);
+      font-size: 23px;
+    }
+
+    .card h3 { margin: 15px 0 5px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .status-label {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .services .card { transition: transform 180ms ease, box-shadow 180ms ease; }
+    .services .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgb(15 23 42 / 7%);
+    }
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px;
+      border: 1px solid #bae6fd;
+      border-radius: 16px;
+      background: #f0f9ff;
+    }
+
+    .notice strong { display: block; margin-bottom: 4px; }
+    .notice p { margin: 0; color: #475569; font-size: 14px; }
+
+    .track-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .track-row input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+    }
+
+    .track-result {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 25px 6%;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      background: white;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 760px) {
+      .topbar { padding: 14px 6%; }
+      .nav { gap: 12px; }
+      .nav a:not(.button) { display: none; }
+      .hero { padding: 48px 0; }
+      .grid { grid-template-columns: 1fr; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .track-row { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+
+    /* JalSetu live complaint dashboard */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 22px 0;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.035);
+    }
+
+    .stat-card .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stat-card .stat-number {
+      display: block;
+      margin-top: 5px;
+      font-size: 30px;
+      line-height: 1.3;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .complaint-tools {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(145px, 0.55fr);
+      gap: 10px;
+      margin: 18px 0 12px;
+    }
+
+    .complaint-tools input,
+    .complaint-tools select {
+      width: 100%;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .complaint-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 12px;
+      background: #fff;
+    }
+
+    .complaint-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .complaint-reference {
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+      margin-top: 4px;
+    }
+
+    .complaint-status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .complaint-status.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .complaint-status.in-progress {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .complaint-status.resolved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .complaint-meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 10px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    .dashboard-empty {
+      padding: 18px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .complaint-tools { grid-template-columns: 1fr; }
+      .stat-card { padding: 15px; }
+      .stat-card .stat-number { font-size: 26px; }
+    }
+
+
+    /* Phase 2: refined aquatic interface */
+    input, select, textarea {
+      width: 100%;
+      max-width: 100%;
+      min-height: 46px;
+      padding: 12px 14px;
+      border: 1px solid #cbdde5;
+      border-radius: 10px;
+      background: #fff;
+      color: #102a43;
+      font: inherit;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #087e8b;
+      box-shadow: 0 0 0 3px rgba(8,126,139,.14);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+      color: #183b53;
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 16px;
+    }
+
+    .location-grid p { min-width: 0; }
+    .location-grid p:first-child { grid-column: 1 / -1; }
+
+    #jalsetu-public-note { padding-top: 18px; padding-bottom: 54px; }
+
+    #jalsetu-public-note .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    #jalsetu-public-note .card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 24px;
+      border: 1px solid #dcecf0;
+      border-radius: 18px;
+      background: linear-gradient(155deg, #ffffff 45%, #f0fbfb 100%);
+      box-shadow: 0 12px 32px rgba(11,37,69,.07);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    #jalsetu-public-note .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(11,37,69,.12);
+    }
+
+    #jalsetu-public-note .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #0b2545, #087e8b, #38bdf8);
+    }
+
+    #jalsetu-public-note .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      margin-bottom: 18px;
+      border-radius: 16px;
+      background: #e3f7f7;
+      color: #087e8b;
+      font-size: 25px;
+    }
+
+    #jalsetu-public-note h3 {
+      margin: 0 0 10px;
+      color: #0b2545;
+      font-size: 20px;
+      letter-spacing: -.35px;
+    }
+
+    #jalsetu-public-note p {
+      margin: 0;
+      color: #5b7080;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .account-prompt {
+      margin-top: 16px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: #edf9f9;
+      color: #36566a;
+      font-size: 14px;
+    }
+
+    .account-prompt a {
+      color: #087e8b;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 760px) {
+      #jalsetu-public-note .grid { grid-template-columns: 1fr; gap: 16px; }
+      #jalsetu-public-note .card { padding: 24px 21px; }
+    }
+
+    @media (max-width: 520px) {
+      .location-grid { grid-template-columns: 1fr; }
+      .location-grid p:first-child { grid-column: auto; }
+      input, select, textarea { font-size: 16px; }
+    }
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="JalSetu home">
+      <span class="brand-icon">💧</span>
+      <span>JalSetu</span>
+    </a>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#services">Services</a>
+      <a href="#updates">Updates</a>
+      <a href="#track">Track Complaint</a>
+      <a class="button" href="#services">Get Started</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <span class="eyebrow">Smart water management</span>
+        <h1>Every Drop Matters.<br><span>Every Voice Counts.</span></h1>
+        <p>
+          A smarter connection between communities and water services.
+          Report supply issues, follow complaints, and stay informed
+          as JalSetu develops into a unified water-management platform.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#services">Explore Services →</a>
+          <a class="button secondary" href="#track">Track a Complaint</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container services" id="services">
+      <div class="section-heading">
+        <div>
+          <h2>How can we help?</h2>
+          <p>Water services designed around your community.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">📝</div>
+          <h3>Report a Problem</h3>
+          <p>Report water leakage, supply interruptions, and other water-related issues.</p>
+          <a class="button secondary" href="#complaint-form">Report a Problem</a>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">🔎</div>
+          <h3>Track Complaints</h3>
+          <p>Check the latest status of a complaint using its reference number.</p>
+          <a class="button secondary" href="#track">Track a Complaint</a>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">📢</div>
+          <h3>Water Supply Updates</h3>
+          <p>Find service announcements and supply updates when official data is connected.</p>
+          <span class="status-label">Updates coming soon</span>
+        </article>
+      </div>
+    </section>
+
+
+
+    <section class="container" id="jalsetu-public-note">
+      <div class="section-heading">
+        <div>
+          <h2>Better water services start with you</h2>
+          <p>A simpler, clearer connection between residents and water service teams.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="feature-icon" aria-hidden="true">🌐</div>
+          <h3>Connected communities</h3>
+          <p>Bring your community’s water concerns into one place. Report local issues clearly and help service teams understand where support is needed.</p>
+        </article>
+        <article class="card">
+          <div class="feature-icon" aria-hidden="true">🔎</div>
+          <h3>Transparent tracking</h3>
+          <p>Follow your complaint with a reference number and check its recorded progress, from submission through resolution.</p>
+        </article>
+        <article class="card">
+          <div class="feature-icon" aria-hidden="true">💧</div>
+          <h3>Water-conscious future</h3>
+          <p>Make water concerns easier to communicate, support more responsive services, and help communities work toward a more water-conscious future.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container" id="account">
+      <div class="section-heading">
+        <div>
+          <h2>Your JalSetu Account</h2>
+          <p>Register or sign in to manage your water complaints.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Create an account</h3>
+          <form id="register-form">
+            <p>
+              <label for="register-name">Full name</label>
+              <input id="register-name" name="full_name" required maxlength="120">
+            </p>
+            <p>
+              <label for="register-email">Email address</label>
+              <input id="register-email" name="email" type="email" required>
+            </p>
+            <p>
+              <label for="register-password">Password (minimum 8 characters)</label>
+              <input id="register-password" name="password" type="password" minlength="8" maxlength="128" required>
+            </p>
+            <button class="button" type="submit">Register</button>
+            <p id="register-result" role="status" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Sign in</h3>
+          <form id="login-form">
+            <p>
+              <label for="login-email">Email address</label>
+              <input id="login-email" name="email" type="email" required>
+            </p>
+            <p>
+              <label for="login-password">Password</label>
+              <input id="login-password" name="password" type="password" required>
+            </p>
+            <button class="button" type="submit">Login</button>
+            <p id="login-result" role="status" aria-live="polite"></p>
+          </form>
+          <div id="account-session" aria-live="polite"></div>
+          <button class="button secondary" id="logout-button" type="button" hidden>Logout</button>
+        </article>
+      </div>
+    </section>
+
+
+
+    <section class="container" id="complaints">
+      <div class="section-heading">
+        <div>
+          <h2>Report a Water Problem</h2>
+          <p>Sign in first, then submit your complaint to the water service team.</p>
+        </div>
+      </div>
+
+      <div class="dashboard-stats" aria-label="Your complaint statistics">
+        <article class="stat-card">
+          <span class="stat-label">Total complaints</span>
+          <strong class="stat-number" id="stat-total">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Pending</span>
+          <strong class="stat-number" id="stat-pending">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">In progress</span>
+          <strong class="stat-number" id="stat-progress">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Resolved</span>
+          <strong class="stat-number" id="stat-resolved">0</strong>
+        </article>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Submit a complaint</h3>
+          <form id="complaint-form">
+            <p>
+              <label for="complaint-title">Complaint title</label>
+              <input id="complaint-title" name="title"
+                placeholder="e.g. Low water pressure" maxlength="150" required>
+            </p>
+            <p>
+              <label for="complaint-category">Category</label>
+              <select id="complaint-category" name="category" required>
+                <option value="Water Supply">Water Supply</option>
+                <option value="No Water Supply">No Water Supply</option>
+                <option value="Low Water Pressure">Low Water Pressure</option>
+                <option value="Water Leakage">Water Leakage</option>
+                <option value="Pipeline Damage">Pipeline Damage</option>
+                <option value="Water Quality">Water Quality</option>
+                <option value="Contaminated Water">Contaminated Water</option>
+                <option value="Billing">Billing</option>
+                <option value="Other">Other</option>
+              </select>
+            </p>
+            <p>
+              <label for="complaint-description">Describe the problem</label>
+              <textarea id="complaint-description" name="description"
+                rows="4" placeholder="Explain the water supply issue..."
+                required></textarea>
+            </p>
+            <div class="location-grid">
+              <p>
+                <label for="complaint-state">State</label>
+                <select id="complaint-state" required>
+                  <option value="Maharashtra" selected>Maharashtra</option>
+                </select>
+              </p>
+              <p>
+                <label for="complaint-city">City / Town</label>
+                <select id="complaint-city" required>
+                  <option value="">Select city or town</option>
+                </select>
+              </p>
+              <p>
+                <label for="complaint-locality">Locality / Area</label>
+                <select id="complaint-locality" required>
+                  <option value="">Select a city first</option>
+                </select>
+              </p>
+              <p id="other-locality-wrap" hidden>
+                <label for="complaint-other-locality">Enter locality name</label>
+                <input id="complaint-other-locality" type="text"
+                  maxlength="120" placeholder="Enter your locality or area">
+              </p>
+            </div>
+            <p>
+              <label for="complaint-location">Street, area and landmark</label>
+              <textarea id="complaint-location" name="location_details"
+                rows="4" maxlength="400"
+                placeholder="Enter your locality, street, building, nearby landmark and any directions..."
+                required></textarea>
+            </p>
+            <button class="button" type="submit">Submit Complaint</button>
+            <p id="complaint-result" role="status" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>My complaints</h3>
+          <p>View and filter complaints submitted from your account.</p>
+          <div class="complaint-tools">
+            <input id="complaint-search" type="search"
+              placeholder="Search reference, title or category"
+              aria-label="Search your complaints">
+            <select id="complaint-status-filter" aria-label="Filter complaints by status">
+              <option value="all">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In progress</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+          <button class="button secondary" id="refresh-complaints"
+            type="button">Refresh Complaints</button>
+          <div id="my-complaints" aria-live="polite">
+            Sign in to view your complaints.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="container" id="track">
+      <div class="section-heading">
+        <div>
+          <h2>Track your complaint</h2>
+          <p>Enter a complaint reference number below.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <form id="track-form">
+          <label for="reference"><strong>Complaint reference number</strong></label>
+          <div class="track-row">
+            <input id="reference" name="reference" placeholder="e.g. JAL-2026-0001" required>
+            <button class="button" type="submit">Check Status</button>
+          </div>
+          <p id="track-result" class="track-result" role="status" aria-live="polite">
+            Your complaint status will appear here after you check your reference number.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <section class="container" id="updates">
+      <div class="notice">
+        <span aria-hidden="true">ℹ️</span>
+        <div>
+          <strong>Welcome to JalSetu</strong>
+          <p>
+            Use JalSetu to submit and track water-service complaints.
+            Sign in to access your complaint history. Administrators can
+            review complaints and update their status.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 JalSetu · Smart Water Supply Management System</p>
+    <p>Building better water services, one community at a time.</p>
+  </footer>
+
+
+<script>
+  const API_BASE = "http://localhost:5000";
+
+  // Show messages without reloading the page.
+  function showMessage(elementId, message, isError = false) {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.style.color = isError ? "#b91c1c" : "#15803d";
+  }
+
+  // Display the current login session.
+  function updateAccountSession() {
+    const savedUser = sessionStorage.getItem("jalsetu_user");
+    const sessionElement = document.getElementById("account-session");
+    const logoutButton = document.getElementById("logout-button");
+
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      sessionElement.textContent = "Signed in as " + user.full_name +
+        " (" + user.email + ")";
+      logoutButton.hidden = false;
+    } else {
+      sessionElement.textContent = "You are not signed in.";
+      logoutButton.hidden = true;
+    }
+  }
+
+  // Register a new user.
+  document.getElementById("register-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const full_name = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const password = document.getElementById("register-password").value;
+    const button = this.querySelector('button[type="submit"]');
+
+    button.disabled = true;
+    showMessage("register-result", "Creating your account...");
+
+    try {
+      const response = await fetch(API_BASE + "/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ full_name, email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Registration failed.");
+      }
+
+      showMessage(
+        "register-result",
+        "Account created successfully! You can now sign in."
+      );
+
+      document.getElementById("register-password").value = "";
+      window.setTimeout(function () {
+        window.location.href = "login.html";
+      }, 900);
+    } catch (error) {
+      showMessage(
+        "register-result",
+        error.message === "Failed to fetch"
+          ? "Cannot reach the backend. Check that the Flask server is running."
+          : error.message,
+        true
+      );
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // Sign in an existing user.
+  document.getElementById("login-form").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+    const button = this.querySelector('button[type="submit"]');
+
+    button.disabled = true;
+    showMessage("login-result", "Signing you in...");
+
+    try {
+      const response = await fetch(API_BASE + "/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Login failed.");
+      }
+
+      sessionStorage.setItem("jalsetu_token", data.access_token);
+      sessionStorage.setItem("jalsetu_user", JSON.stringify(data.user));
+
+      showMessage("login-result", "Login successful! Opening your dashboard...");
+      document.getElementById("login-password").value = "";
+      window.location.href = "dashboard.html";
+    } catch (error) {
+      showMessage(
+        "login-result",
+        error.message === "Failed to fetch"
+          ? "Cannot reach the backend. Check that the Flask server is running."
+          : error.message,
+        true
+      );
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // Sign out and remove the current browser session.
+  document.getElementById("logout-button").addEventListener("click", function () {
+    sessionStorage.removeItem("jalsetu_token");
+    sessionStorage.removeItem("jalsetu_user");
+
+    window.location.href = "index.html";
+  });
+
+
+  // Live complaint data for the signed-in user.
+  let allComplaints = [];
+
+  function normalizedStatus(status) {
+    const value = String(status || "").trim().toLowerCase().replace(/[_-]+/g, " ");
+    if (value === "pending") return "pending";
+    if (value === "in progress" || value === "inprogress") return "in-progress";
+    if (value === "resolved" || value === "completed" || value === "closed") return "resolved";
+    return "other";
+  }
+
+  function updateDashboardStats(complaints) {
+    document.getElementById("stat-total").textContent = complaints.length;
+    document.getElementById("stat-pending").textContent =
+      complaints.filter(c => normalizedStatus(c.status) === "pending").length;
+    document.getElementById("stat-progress").textContent =
+      complaints.filter(c => normalizedStatus(c.status) === "in-progress").length;
+    document.getElementById("stat-resolved").textContent =
+      complaints.filter(c => normalizedStatus(c.status) === "resolved").length;
+  }
+
+  // Build complaint cards using textContent to keep API data as plain text.
+  function renderComplaints() {
+    const container = document.getElementById("my-complaints");
+    const search = document.getElementById("complaint-search").value.trim().toLowerCase();
+    const statusFilter = document.getElementById("complaint-status-filter").value;
+
+    const filtered = allComplaints.filter(function (complaint) {
+      const searchable = [
+        complaint.reference_number,
+        complaint.title,
+        complaint.category,
+        complaint.status,
+        complaint.location_text
+      ].join(" ").toLowerCase();
+
+      return searchable.includes(search) &&
+        (statusFilter === "all" || normalizedStatus(complaint.status) === statusFilter);
+    });
+
+    container.replaceChildren();
+
+    if (allComplaints.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "dashboard-empty";
+      empty.textContent = "You have not submitted any complaints yet.";
+      container.appendChild(empty);
+      return;
+    }
+
+    if (filtered.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "dashboard-empty";
+      empty.textContent = "No complaints match your search or selected status.";
+      container.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function (complaint) {
+      const item = document.createElement("article");
+      item.className = "complaint-item";
+
+      const header = document.createElement("div");
+      header.className = "complaint-item-header";
+
+      const headingGroup = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = complaint.title || "Untitled complaint";
+
+      const reference = document.createElement("div");
+      reference.className = "complaint-reference";
+      reference.textContent = "Reference: " + (complaint.reference_number || "Unavailable");
+
+      headingGroup.append(title, reference);
+
+      const status = document.createElement("span");
+      const statusClass = normalizedStatus(complaint.status);
+      status.className = "complaint-status" +
+        (statusClass === "other" ? "" : " " + statusClass);
+      status.textContent = complaint.status || "Unknown";
+
+      header.append(headingGroup, status);
+      item.appendChild(header);
+
+      const details = document.createElement("p");
+      details.className = "complaint-meta";
+      details.textContent = "Category: " + (complaint.category || "Other") +
+        (complaint.location_text ? " · Location: " + complaint.location_text : "");
+      item.appendChild(details);
+
+      if (complaint.description) {
+        const description = document.createElement("p");
+        description.className = "complaint-meta";
+        description.textContent = complaint.description;
+        item.appendChild(description);
+      }
+
+      const trackButton = document.createElement("button");
+      trackButton.type = "button";
+      trackButton.className = "button secondary";
+      trackButton.textContent = "Check Status";
+      trackButton.addEventListener("click", function () {
+        document.getElementById("reference").value = complaint.reference_number || "";
+        document.getElementById("track").scrollIntoView({ behavior: "smooth" });
+      });
+      item.appendChild(trackButton);
+      container.appendChild(item);
+    });
+  }
+
+  // Fetch only the complaints permitted by the authenticated API.
+  async function loadComplaints() {
+    const container = document.getElementById("my-complaints");
+    const token = sessionStorage.getItem("jalsetu_token");
+
+    if (!token) {
+      allComplaints = [];
+      updateDashboardStats(allComplaints);
+      container.textContent = "Please sign in to view your complaints.";
+      return;
+    }
+
+    container.textContent = "Loading your complaints...";
+
+    try {
+      const response = await fetch(API_BASE + "/api/complaints", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Could not load complaints.");
+      }
+
+      allComplaints = Array.isArray(data.complaints) ? data.complaints : [];
+      updateDashboardStats(allComplaints);
+      renderComplaints();
+    } catch (error) {
+      container.textContent = error.message === "Failed to fetch"
+        ? "Cannot reach the backend. Make sure Flask is running."
+        : error.message;
+    }
+  }
+
+  document.getElementById("complaint-search").addEventListener("input", renderComplaints);
+  document.getElementById("complaint-status-filter").addEventListener("change", renderComplaints);
+
+  // Submit a complaint to the Flask backend.
+  document.getElementById("complaint-form").addEventListener(
+    "submit", async function (event) {
+      event.preventDefault();
+
+      const token = sessionStorage.getItem("jalsetu_token");
+      if (!token) {
+        showMessage(
+          "complaint-result",
+          "Please sign in before submitting a complaint.",
+          true
+        );
+        return;
+      }
+
+      const button = this.querySelector('button[type="submit"]');
+      const complaint = {
+        title: document.getElementById("complaint-title").value.trim(),
+        category: document.getElementById("complaint-category").value,
+        description: document.getElementById("complaint-description").value.trim(),
+        location_text: [
+          document.getElementById("complaint-state").value,
+          document.getElementById("complaint-city").value,
+          (document.getElementById("complaint-locality").value === "Other locality"
+            ? document.getElementById("complaint-other-locality").value.trim()
+            : document.getElementById("complaint-locality").value),
+          document.getElementById("complaint-location").value.trim()
+        ].filter(Boolean).join(", ")
+      };
+
+      button.disabled = true;
+      showMessage("complaint-result", "Submitting your complaint...");
+
+      try {
+        const response = await fetch(API_BASE + "/api/complaints", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify(complaint)
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || data.error || "Complaint submission failed.");
+        }
+
+        showMessage(
+          "complaint-result",
+          "Complaint submitted! Your reference number is " +
+            data.complaint.reference_number +
+            ". Save this number to track your complaint."
+        );
+
+        this.reset();
+        await loadComplaints();
+      } catch (error) {
+        showMessage(
+          "complaint-result",
+          error.message === "Failed to fetch"
+            ? "Cannot reach the backend. Make sure Flask is running."
+            : error.message,
+          true
+        );
+      } finally {
+        button.disabled = false;
+      }
+    }
+  );
+
+  // Look up a complaint by its reference number.
+  document.getElementById("track-form").addEventListener(
+    "submit", async function (event) {
+      event.preventDefault();
+
+      const reference = document.getElementById("reference").value.trim();
+      const token = sessionStorage.getItem("jalsetu_token");
+
+      if (!reference) {
+        showMessage("track-result", "Please enter a complaint reference number.", true);
+        return;
+      }
+
+      if (!token) {
+        showMessage("track-result", "Please sign in to track your complaint.", true);
+        return;
+      }
+
+      showMessage("track-result", "Checking complaint status...");
+
+      try {
+        const response = await fetch(
+          API_BASE + "/api/complaints/" + encodeURIComponent(reference),
+          { headers: { "Authorization": "Bearer " + token } }
+        );
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || data.message || "Complaint not found. Check the reference number."
+          );
+        }
+
+        const c = data.complaint;
+        showMessage(
+          "track-result",
+          "Reference: " + c.reference_number +
+          " | Status: " + c.status +
+          " | Title: " + c.title +
+          " | Category: " + c.category +
+          " | Location: " + c.location_text +
+          " | Submitted: " + new Date(c.created_at).toLocaleString()
+        );
+      } catch (error) {
+        showMessage(
+          "track-result",
+          error.message === "Failed to fetch"
+            ? "Cannot reach the backend. Make sure Flask is running."
+            : error.message,
+          true
+        );
+      }
+    }
+  );
+
+  document.getElementById("refresh-complaints").addEventListener(
+    "click", loadComplaints
+  );
+
+  // Restore the visible session while this browser tab remains open.
+  updateAccountSession();
+  loadComplaints();
+</script>
+
+
+<!-- JALSETU_ADMIN_NAV_V1 -->
+<a id="jalsetu-admin-nav" href="admin.html"
+   style="display:none;position:fixed;right:20px;bottom:20px;z-index:99999;
+   padding:12px 18px;background:#075985;color:white;text-decoration:none;
+   border-radius:10px;font:600 14px Arial,sans-serif;
+   box-shadow:0 4px 14px #0003;">
+   Admin Dashboard
+</a>
+<script>
+(function () {
+  function updateAdminLink() {
+    const link = document.getElementById("jalsetu-admin-nav");
+    if (!link) return;
+    let isAdmin = false;
+    try {
+      const token = sessionStorage.getItem("jalsetu_token");
+      const user = JSON.parse(sessionStorage.getItem("jalsetu_user") || "null");
+      isAdmin = Boolean(token && user && user.role === "admin");
+    } catch (_) {}
+    link.style.display = isAdmin ? "block" : "none";
+  }
+  updateAdminLink();
+  setInterval(updateAdminLink, 700);
+})();
+</script>
+
+
+<script id="jalsetu-page-routing">
+(function () {
+  const page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const token = sessionStorage.getItem("jalsetu_token");
+  const user = (() => {
+    try { return JSON.parse(sessionStorage.getItem("jalsetu_user") || "null"); }
+    catch (_) { return null; }
+  })();
+
+  const hero = document.querySelector("main > .hero");
+  const services = document.getElementById("services");
+  const account = document.getElementById("account");
+  const complaints = document.getElementById("complaints");
+  const track = document.getElementById("track");
+  const publicNote = document.getElementById("jalsetu-public-note");
+  const nav = document.querySelector(".topbar .nav");
+  const brand = document.querySelector(".topbar .brand");
+
+  if (brand) brand.href = "index.html";
+
+  function show(el, visible) {
+    if (el) el.style.display = visible ? "" : "none";
+  }
+
+  if (page === "dashboard.html") {
+    // Keep dashboard content hidden until the backend validates the session.
+    show(hero, false);
+    show(services, false);
+    show(account, false);
+    show(complaints, false);
+    show(track, false);
+    show(publicNote, false);
+
+    if (!token || !user) {
+      location.replace("login.html");
+      return;
+    }
+
+    async function verifyDashboardSession() {
+      try {
+        const response = await fetch(API_BASE + "/api/auth/me", {
+          method: "GET",
+          headers: { "Authorization": "Bearer " + token }
+        });
+
+        let data = {};
+        try {
+          data = await response.json();
+        } catch (_) {}
+
+        if (!response.ok || !data.user) {
+          sessionStorage.removeItem("jalsetu_token");
+          sessionStorage.removeItem("jalsetu_user");
+          location.replace("login.html");
+          return;
+        }
+
+        // Refresh the cached user from the verified backend response.
+        sessionStorage.setItem("jalsetu_user", JSON.stringify(data.user));
+
+        show(complaints, true);
+        show(track, true);
+        show(publicNote, true);
+
+        if (nav) nav.innerHTML =
+          '<a href="index.html">Home</a>' +
+          '<a href="#complaint-form">Report a Problem</a>' +
+          '<a href="#track">Track Complaint</a>' +
+          '<a class="button" id="page-logout" href="index.html">Logout</a>';
+
+        const logout = document.getElementById("page-logout");
+        if (logout) logout.addEventListener("click", function (event) {
+          event.preventDefault();
+          sessionStorage.removeItem("jalsetu_token");
+          sessionStorage.removeItem("jalsetu_user");
+          location.replace("index.html");
+        });
+
+        const heading = complaints &&
+          complaints.querySelector(".section-heading h2");
+        if (heading) heading.textContent = "Your Water Service Dashboard";
+
+        const description = complaints &&
+          complaints.querySelector(".section-heading p");
+        if (description) description.textContent =
+          "Submit water-related complaints and track their progress.";
+
+      } catch (_) {
+        // A network failure is not proof that the token is invalid.
+        // Keep the dashboard hidden and let the user retry.
+        let status = document.getElementById("dashboard-auth-status");
+        if (!status) {
+          status = document.createElement("p");
+          status.id = "dashboard-auth-status";
+          status.className = "page-note";
+          status.setAttribute("role", "alert");
+          const main = document.querySelector("main");
+          if (main) main.prepend(status);
+        }
+        if (status) status.textContent =
+          "Unable to verify your session because the backend is unreachable. " +
+          "Start the backend and reload this page.";
+      }
+    }
+
+    verifyDashboardSession();
+    return;
+  }
+
+  if (page === "index.html" || page === "login.html" || page === "register.html") {
+    show(hero, false);
+    show(services, false);
+    show(account, true);
+    show(complaints, false);
+    show(track, false);
+    show(publicNote, false);
+
+    const registerForm = document.getElementById("register-form");
+    const loginForm = document.getElementById("login-form");
+    const registerCard = registerForm && registerForm.closest("article");
+    const loginCard = loginForm && loginForm.closest("article");
+    const heading = account && account.querySelector(".section-heading h2");
+    const description = account && account.querySelector(".section-heading p");
+
+    if (page === "index.html" || page === "login.html") {
+      show(registerCard, false);
+      show(loginCard, true);
+      if (heading) heading.textContent = "Welcome Back";
+      if (description) description.textContent =
+        "Sign in to report water issues and manage your complaints.";
+      const result = document.getElementById("login-result");
+      if (result && !document.getElementById("create-account-link")) {
+        const link = document.createElement("p");
+        link.className = "page-note";
+        link.id = "create-account-link";
+        link.append("New to JalSetu? ");
+        const anchor = document.createElement("a");
+        anchor.href = "register.html";
+        anchor.textContent = "Create a new account";
+        anchor.style.color = "#087e8b";
+        anchor.style.fontWeight = "700";
+        link.appendChild(anchor);
+        result.insertAdjacentElement("afterend", link);
+      }
+      if (nav) nav.innerHTML =
+        '<a href="index.html">Home</a>' +
+        '<a href="register.html">Create Account</a>';
+    } else {
+      show(registerCard, true);
+      show(loginCard, false);
+      if (heading) heading.textContent = "Create Your JalSetu Account";
+      if (description) description.textContent =
+        "Register to submit and track water service complaints.";
+      if (nav) nav.innerHTML =
+        '<a href="index.html">Home</a>' +
+        '<a href="login.html">Already registered? Login</a>';
+      const result = document.getElementById("register-result");
+      if (result && !document.getElementById("existing-account-link")) {
+        const link = document.createElement("p");
+        link.className = "page-note";
+        link.id = "existing-account-link";
+        link.append("Already have an account? ");
+        const anchor = document.createElement("a");
+        anchor.href = "login.html";
+        anchor.textContent = "Sign in";
+        anchor.style.color = "#087e8b";
+        anchor.style.fontWeight = "700";
+        link.appendChild(anchor);
+        result.insertAdjacentElement("afterend", link);
+      }
+    }
+    return;
+  }
+
+  // Public homepage: no complaint or account forms before sign-in.
+  show(hero, true);
+  show(services, true);
+  show(account, false);
+  show(complaints, false);
+  show(track, false);
+  show(publicNote, false);
+  if (nav) nav.innerHTML =
+    '<a href="#services">Services</a>' +
+    '<a href="login.html">Track Complaint</a>' +
+    '<a class="button" href="login.html">Login</a>' +
+    '<a class="button secondary" href="register.html">Create Account</a>';
+
+  document.querySelectorAll('a[href="#complaint-form"], a[href="#track"]').forEach(function (link) {
+    link.href = "login.html";
+  });
+  document.querySelectorAll('a[href="#services"]').forEach(function (link) {
+    link.href = "#services";
+  });
+
+  // If already authenticated, give the user a direct route to their dashboard.
+  if (token && user && nav) {
+    const dashboardLink = document.createElement("a");
+    dashboardLink.href = "dashboard.html";
+    dashboardLink.className = "button";
+    dashboardLink.textContent = "My Dashboard";
+    nav.appendChild(dashboardLink);
+  }
+})();
+</script>
+
+
+<script id="jalsetu-maharashtra-locations">
+(function () {
+  const citySelect = document.getElementById("complaint-city");
+  const localitySelect = document.getElementById("complaint-locality");
+  const stateSelect = document.getElementById("complaint-state");
+  const otherWrap = document.getElementById("other-locality-wrap");
+  const otherInput = document.getElementById("complaint-other-locality");
+
+  if (!citySelect || !localitySelect || !stateSelect || !otherWrap || !otherInput) return;
+
+  // City list retains the districts for the existing city dropdown.
+  const places = [
+    ["Ahilyanagar", "Ahilyanagar"], ["Akola", "Akola"],
+    ["Alibag", "Raigad"], ["Amravati", "Amravati"],
+    ["Bandra", "Mumbai Suburban"], ["Beed", "Beed"],
+    ["Bhandara", "Bhandara"], ["Buldhana", "Buldhana"],
+    ["Chandrapur", "Chandrapur"],
+    ["Chhatrapati Sambhajinagar", "Chhatrapati Sambhajinagar"],
+    ["Dharashiv", "Dharashiv"], ["Dhule", "Dhule"],
+    ["Gadchiroli", "Gadchiroli"], ["Gondia", "Gondia"],
+    ["Hingoli", "Hingoli"], ["Jalgaon", "Jalgaon"],
+    ["Jalna", "Jalna"], ["Kolhapur", "Kolhapur"],
+    ["Latur", "Latur"], ["Mumbai", "Mumbai City"],
+    ["Nagpur", "Nagpur"], ["Nanded", "Nanded"],
+    ["Nandurbar", "Nandurbar"], ["Nashik", "Nashik"],
+    ["Oros", "Sindhudurg"], ["Palghar", "Palghar"],
+    ["Parbhani", "Parbhani"], ["Pune", "Pune"],
+    ["Ratnagiri", "Ratnagiri"], ["Sangli", "Sangli"],
+    ["Satara", "Satara"], ["Solapur", "Solapur"],
+    ["Thane", "Thane"], ["Wardha", "Wardha"],
+    ["Washim", "Washim"], ["Yavatmal", "Yavatmal"]
+  ];
+
+  // Known localities/areas for major cities. This list can be expanded
+  // without changing the backend or complaint database.
+  const localities = {
+    "Pune": [
+      "Aundh", "Baner", "Bavdhan", "Bibwewadi", "Camp",
+      "Deccan Gymkhana", "Dhankawadi", "Hadapsar", "Hinjawadi",
+      "Kalyani Nagar", "Karve Nagar", "Kasarwadi", "Katraj",
+      "Kharadi", "Kondhwa", "Koregaon Park", "Lohegaon",
+      "Magarpatta", "Market Yard", "Pashan", "Pimple Saudagar",
+      "Pimpri", "Chinchwad", "Shivajinagar", "Sinhagad Road",
+      "Swargate", "Viman Nagar", "Wagholi", "Warje", "Wakad",
+      "Yerawada"
+    ],
+    "Mumbai": [
+      "Andheri East", "Andheri West", "Bandra East", "Bandra West",
+      "Borivali", "Byculla", "Chembur", "Colaba", "Dadar",
+      "Fort", "Ghatkopar", "Goregaon", "Jogeshwari", "Juhu",
+      "Kandivali", "Kurla", "Lower Parel", "Malad", "Matunga",
+      "Mulund", "Powai", "Santacruz", "Vile Parle", "Worli"
+    ],
+    "Bandra": [
+      "Bandra East", "Bandra West", "Kherwadi", "Pali Hill",
+      "Bandra Reclamation", "Other locality"
+    ],
+    "Chhatrapati Sambhajinagar": [
+      "CIDCO", "Garkheda", "Osmanpura", "Samarth Nagar",
+      "Kranti Chowk", "Jalna Road", "Beed Bypass",
+      "Satara Parisar", "Chikalthana", "Waluj", "N-1",
+      "N-2", "N-3", "N-4", "N-5", "N-6", "N-7",
+      "N-8", "N-9", "N-10", "N-11", "N-12",
+      "Shahnoorwadi", "Railway Station Area"
+    ],
+    "Nashik": [
+      "College Road", "Gangapur Road", "Panchavati", "Indira Nagar",
+      "CIDCO", "Satpur", "Ambad", "Nashik Road", "Deolali",
+      "Dwarka", "Pathardi Phata", "Govind Nagar", "Makhmalabad",
+      "Adgaon", "Mumbai Naka"
+    ],
+    "Nagpur": [
+      "Dharampeth", "Sitabuldi", "Sadar", "Manish Nagar",
+      "Wardhaman Nagar", "MIHAN", "Hingna", "Nandanvan",
+      "Trimurti Nagar", "Pratap Nagar", "Mankapur", "Jaripatka",
+      "Itwari", "Mahal", "Bajaj Nagar", "Civil Lines",
+      "Dhantoli", "Besa", "Khamla"
+    ],
+    "Thane": [
+      "Ghodbunder Road", "Majiwada", "Naupada", "Wagle Estate",
+      "Kolshet", "Vartak Nagar", "Kalwa", "Mumbra",
+      "Hiranandani Estate", "Kasarvadavali", "Manpada",
+      "Kopri", "Lokmanya Nagar"
+    ],
+    "Kolhapur": [
+      "Rajarampuri", "Shahupuri", "Tarabai Park", "Rankala",
+      "Kasba Bawada", "Uchgaon", "Mahalaxmi Area", "Shivaji Peth"
+    ],
+    "Solapur": [
+      "Jule Solapur", "Hotgi Road", "Saat Rasta", "Akkalkot Road",
+      "Vijapur Road", "Railway Lines", "Navi Peth", "Budhwar Peth"
+    ],
+    "Amravati": [
+      "Rajapeth", "Badnera Road", "Camp", "Rukhmini Nagar",
+      "Shegaon Naka", "Dastur Nagar", "Gadge Nagar"
+    ],
+    "Akola": [
+      "Ranpise Nagar", "Jatharpeth", "Toshniwal Layout",
+      "Gorakshan Road", "Murtizapur Road", "Old City"
+    ],
+    "Jalgaon": [
+      "Mehrun", "Ramanand Nagar", "Ring Road", "MIDC",
+      "Shivaji Nagar", "Ganesh Colony"
+    ],
+    "Nanded": [
+      "Vazirabad", "Shivaji Nagar", "Taroda Naka",
+      "CIDCO", "Kautha", "Bhagya Nagar"
+    ],
+    "Sangli": [
+      "Vishrambag", "Gaon Bhag", "Kupwad", "Madhavnagar",
+      "Miraj", "Wanlesswadi"
+    ],
+    "Satara": [
+      "Powai Naka", "Sadar Bazar", "Shahupuri",
+      "Godoli", "Karanje", "MIDC"
+    ],
+    "Ratnagiri": [
+      "Maruti Mandir", "Nachane", "Mirjole", "Madhali Ali",
+      "Kuwarbav", "Zadgaon"
+    ],
+    "Latur": [
+      "Shivaji Nagar", "Ausa Road", "Barshi Road",
+      "MIDC", "Vivekanand Chowk"
+    ],
+    "Dhule": [
+      "Deopur", "Agra Road", "Nakane Road", "MIDC",
+      "Parola Road", "Sakri Road"
+    ],
+    "Ahilyanagar": [
+      "Savedi", "Kedgaon", "Bhingar", "Pipeline Road",
+      "Station Road", "MIDC"
+    ],
+    "Palghar": [
+      "Palghar East", "Palghar West", "Boisar",
+      "Tarapur", "Manor"
+    ],
+    "Alibag": [
+      "Alibag Town", "Varsoli", "Nagaon", "Rewas",
+      "Chaul", "Thal"
+    ],
+    "Parbhani": [
+      "Vasmat Road", "Station Road", "Basmat Road",
+      "Jintur Road", "MIDC"
+    ],
+    "Wardha": [
+      "Sawangi", "Sevagram", "Civil Lines",
+      "Bachelor Road", "MIDC"
+    ]
+  };
+
+  const commonLocalities = [
+    "City centre", "Main market area", "Residential area",
+    "Industrial area", "Other locality"
+  ];
+
+  places.sort((a, b) => a[0].localeCompare(b[0], "en"));
+  citySelect.replaceChildren(new Option("Select city or town", ""));
+  places.forEach(([city, district]) => {
+    const option = new Option(city, city);
+    option.dataset.district = district;
+    citySelect.add(option);
+  });
+
+  function updateLocalities() {
+    const city = citySelect.value;
+    localitySelect.replaceChildren();
+    otherInput.value = "";
+    otherInput.required = false;
+    otherWrap.hidden = true;
+
+    if (!city) {
+      localitySelect.add(new Option("Select a city first", ""));
+      return;
+    }
+
+    localitySelect.add(new Option("Select locality / area", ""));
+    const choices = localities[city] || commonLocalities;
+    [...new Set([...choices, "Other locality"])]
+      .sort((a, b) => a.localeCompare(b, "en"))
+      .forEach(name => localitySelect.add(new Option(name, name)));
+  }
+
+  function updateOtherLocality() {
+    const isOther = localitySelect.value === "Other locality";
+    otherWrap.hidden = !isOther;
+    otherInput.required = isOther;
+    if (!isOther) otherInput.value = "";
+  }
+
+  citySelect.addEventListener("change", updateLocalities);
+  localitySelect.addEventListener("change", updateOtherLocality);
+  stateSelect.addEventListener("change", function () {
+    if (stateSelect.value !== "Maharashtra") stateSelect.value = "Maharashtra";
+  });
+
+  updateLocalities();
+})();
+</script>
+
+</body>
+</html>

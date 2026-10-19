@@ -7,3 +7,4 @@ psycopg[binary]
 gunicorn
 python-dotenv
 email-validator
+Pillow>=10.0.0

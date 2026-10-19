@@ -1,0 +1,15 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+instance/
+.env.*
+!.env.example
+
+# Backup files
+*.bak
+
+# Local database backups
+backups/
+backend/uploads/
