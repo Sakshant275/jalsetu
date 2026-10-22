@@ -13,3 +13,6 @@ instance/
 # Local database backups
 backups/
 backend/uploads/
+
+# Timestamped working backups
+*.backup-*

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1e34">
+  <meta name="description" content="JalSetu connects communities with water supply complaint reporting and tracking.">
+  <title>JalSetu | Every Drop Matters</title>
+
+  <style>
+    :root {
+      --navy: #0b1e34;
+      --teal: #087f8c;
+      --aqua: #83eee1;
+      --ink: #10243a;
+      --muted: #62758a;
+      --line: #dce8ee;
+      --soft: #f1f8fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 100px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #fff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+                   BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px clamp(18px, 5vw, 72px);
+      background: rgba(255,255,255,.95);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 28px rgba(16,36,58,.05);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 1.45rem;
+      font-weight: 850;
+      letter-spacing: -.05em;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #dff8f4;
+      font-size: 1.35rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav a {
+      padding: 11px 13px;
+      border-radius: 10px;
+      color: #40556b;
+      font-size: .91rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: .2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--teal);
+      background: #eaf8f7;
+    }
+
+    .nav .nav-primary {
+      color: #082c3b;
+      background: var(--aqua);
+    }
+
+    .nav .nav-primary:hover {
+      background: #5cddce;
+      color: #082c3b;
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      min-height: 600px;
+      overflow: hidden;
+      padding: 90px clamp(22px, 8vw, 115px);
+      color: white;
+      background: var(--navy);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      background-image: url("https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=2200&q=85");
+      background-position: center;
+      background-size: cover;
+      transform: scale(1.02);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(90deg,rgba(5,24,42,.94) 0%,
+          rgba(5,35,52,.78) 48%,rgba(5,35,52,.25) 100%),
+        linear-gradient(0deg,rgba(5,24,42,.35),transparent 60%);
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 14px;
+      border: 1px solid rgba(131,238,225,.4);
+      border-radius: 99px;
+      background: rgba(255,255,255,.08);
+      color: #b8fff4;
+      font-size: .77rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--aqua);
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 24px 0 20px;
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      line-height: 1.02;
+      letter-spacing: -.065em;
+    }
+
+    h1 span { color: var(--aqua); }
+
+    .hero-copy {
+      max-width: 640px;
+      color: #dbeaf1;
+      font-size: clamp(1rem, 1.6vw, 1.17rem);
+      line-height: 1.85;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 13px 20px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: var(--aqua);
+      color: #082c3b;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button.secondary {
+      border-color: rgba(255,255,255,.4);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .intro {
+      padding: 76px 0 28px;
+      text-align: center;
+    }
+
+    .kicker {
+      color: var(--teal);
+      font-size: .78rem;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .intro h2,
+    .how h2 {
+      margin: 12px 0;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      letter-spacing: -.05em;
+    }
+
+    .intro p {
+      max-width: 690px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 20px;
+      padding: 28px 0 80px;
+    }
+
+    .card {
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(150deg,#fff,#f5fbfc);
+      box-shadow: 0 10px 30px rgba(16,36,58,.045);
+    }
+
+    .card-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      margin-bottom: 20px;
+      border: 1px solid #d0efec;
+      border-radius: 16px;
+      background: #e4f8f5;
+      font-size: 1.5rem;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .how {
+      padding: 65px 0 75px;
+      background: var(--soft);
+    }
+
+    .how-inner {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .how p {
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+    }
+
+    .step-number {
+      display: grid;
+      flex: 0 0 38px;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #dff7f3;
+      color: var(--teal);
+      font-weight: 850;
+    }
+
+    .step strong { display: block; margin: 2px 0 5px; }
+    .step p { margin: 0; font-size: .93rem; }
+
+    .cta {
+      padding: 68px 20px;
+      color: white;
+      text-align: center;
+      background: linear-gradient(120deg,#0b1e34,#087f83);
+    }
+
+    .cta h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      letter-spacing: -.04em;
+    }
+
+    .cta p {
+      max-width: 650px;
+      margin: 0 auto;
+      color: #d8efef;
+      line-height: 1.8;
+    }
+
+    .cta .button { margin-top: 23px; }
+
+    footer {
+      padding: 26px 20px;
+      color: #d6e6ee;
+      background: #091a2c;
+      text-align: center;
+    }
+
+    footer p { margin: 6px 0; line-height: 1.7; }
+    footer p + p { color: #9eb7c7; font-size: .9rem; }
+
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        padding: 13px 18px;
+      }
+
+      .nav { justify-content: flex-start; gap: 4px; }
+      .nav a { padding: 9px 10px; font-size: .83rem; }
+      .hero { min-height: 560px; padding: 72px 22px; }
+      .hero::after {
+        background: linear-gradient(90deg,rgba(5,24,42,.91),rgba(5,35,52,.58));
+      }
+      .actions { align-items: stretch; flex-direction: column; max-width: 330px; }
+      .cards { grid-template-columns: 1fr; padding-bottom: 55px; }
+      .how-inner { grid-template-columns: 1fr; gap: 22px; }
+      .intro { padding-top: 56px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+  <script src="config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="home.html" aria-label="JalSetu home">
+      <span class="brand-icon">💧</span>
+      <span>JalSetu</span>
+    </a>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href="home.html">Home</a>
+      <a href="dashboard.html#complaints">File a Complaint</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a class="nav-primary" href="dashboard.html#track">Track Complaint</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow">Smart water supply management</span>
+        <h1>Every Drop Matters.<br><span>Every Voice Counts.</span></h1>
+        <p class="hero-copy">
+          Welcome to JalSetu — a digital connection between communities
+          and water services. Report water-related problems, follow your
+          complaint status, and help make local services more responsive.
+        </p>
+        <div class="actions">
+          <a class="button" href="dashboard.html#complaints">File a Complaint&nbsp; →</a>
+          <a class="button secondary" href="dashboard.html#track">Track Your Complaint</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" aria-labelledby="about-title">
+      <div class="intro">
+        <span class="kicker">About JalSetu</span>
+        <h2 id="about-title">A clearer connection to water services</h2>
+        <p>
+          JalSetu is a water supply management platform designed to help
+          residents submit water-service complaints and check their recorded
+          progress through one convenient digital interface.
+        </p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">📝</div>
+          <h3>Simple complaint filing</h3>
+          <p>Submit water-related issues and provide location details so your concern can be reviewed.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">🔎</div>
+          <h3>Transparent tracking</h3>
+          <p>Use your complaint reference number to check its recorded status and progress.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">🤝</div>
+          <h3>Community connection</h3>
+          <p>Bring water supply concerns into one place and make communication with service teams easier.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="how">
+      <div class="container how-inner">
+        <div>
+          <span class="kicker">How it works</span>
+          <h2>From concern to complaint tracking</h2>
+          <p>
+            JalSetu brings the essential steps together. Sign in to submit
+            a complaint, keep your reference number, and revisit the tracking
+            page to check its recorded progress.
+          </p>
+          <a class="button" href="dashboard.html">Open JalSetu Dashboard →</a>
+        </div>
+
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">01</span>
+            <div>
+              <strong>Submit your concern</strong>
+              <p>Describe the issue and add the requested location information.</p>
+            </div>
+          </article>
+          <article class="step">
+            <span class="step-number">02</span>
+            <div>
+              <strong>Keep your reference number</strong>
+              <p>Use the complaint reference supplied by the application.</p>
+            </div>
+          </article>
+          <article class="step">
+            <span class="step-number">03</span>
+            <div>
+              <strong>Check the status</strong>
+              <p>Return to JalSetu and look up your complaint using its reference.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Have a water supply concern?</h2>
+      <p>Start with the complaint portal or check the progress of a complaint you've already submitted.</p>
+      <div class="actions" style="justify-content:center">
+        <a class="button" href="dashboard.html#complaints">File a Complaint</a>
+        <a class="button secondary" href="dashboard.html#track">Track Complaint</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 JalSetu · MDM Water Supply Management System</p>
+    <p>Building better water services, one community at a time.</p>
+  </footer>
+
+<script id="jalsetu-global-logout">
+(function () {
+  const nav = document.querySelector(".nav");
+  const token = sessionStorage.getItem("jalsetu_token");
+  const user = sessionStorage.getItem("jalsetu_user");
+  if (!token || !user) return;
+  if (!nav || document.getElementById("jalsetu-global-logout-button")) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.id = "jalsetu-global-logout-button";
+  button.textContent = "Logout";
+  button.setAttribute("aria-label", "Log out of JalSetu");
+  button.style.cssText =
+    "cursor:pointer;border:0;border-radius:10px;padding:10px 16px;" +
+    "font:inherit;font-weight:600;background:#0f766e;color:white;";
+
+  button.addEventListener("click", function () {
+    sessionStorage.removeItem("jalsetu_token");
+    sessionStorage.removeItem("jalsetu_user");
+    window.location.replace("home.html");
+  });
+
+  nav.appendChild(button);
+})();
+</script>
+
+  <script src="chatbot.js" defer></script>
+</body>
+</html>

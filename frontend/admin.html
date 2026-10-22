@@ -99,6 +99,7 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:12px}
   h2{font-size:25px}
 }
 </style>
+  <script src="config.js"></script>
 </head>
 <body>
 <header>
@@ -160,7 +161,7 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:12px}
 (() => {
   "use strict";
 
-  const API = "http://localhost:5000/api";
+  const API = window.JALSETU_API_BASE + "/api";
   const token = sessionStorage.getItem("jalsetu_token");
   const savedUser = sessionStorage.getItem("jalsetu_user");
   const notice = document.getElementById("notice");
@@ -406,5 +407,6 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:12px}
   }
 })();
 </script>
+  <script src="chatbot.js" defer></script>
 </body>
 </html>

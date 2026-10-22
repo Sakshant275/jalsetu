@@ -569,6 +569,189 @@
     }
 
   </style>
+
+<style id="jalsetu-auth-layout-shared">
+/* Shared JalSetu sign-in and registration design */
+body:has(#login-form) #account,
+body:has(#register-form) #account {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 75vh !important;
+  margin: 0 auto !important;
+  padding: 48px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  background: linear-gradient(135deg, #e9f8f8 0%, #f4f8fc 100%) !important;
+  border-radius: 24px !important;
+}
+
+body:has(#login-form) #account > .section-heading,
+body:has(#register-form) #account > .section-heading {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 auto 24px !important;
+  text-align: center !important;
+}
+
+body:has(#login-form) #account > article:has(#login-form),
+body:has(#register-form) #account > article:has(#register-form) {
+  box-sizing: border-box !important;
+  display: block !important;
+  float: none !important;
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 auto !important;
+  padding: 36px !important;
+  background: #ffffff !important;
+  border: 1px solid #d5eeee !important;
+  border-top: 5px solid #087e8b !important;
+  border-radius: 20px !important;
+  box-shadow: 0 18px 50px rgba(15, 75, 85, 0.14) !important;
+}
+
+body:has(#login-form) #account article:has(#login-form) h3,
+body:has(#register-form) #account article:has(#register-form) h3 {
+  color: #075b66 !important;
+  text-align: center !important;
+  font-size: 25px !important;
+  margin-top: 0 !important;
+}
+
+body:has(#login-form) #account form input,
+body:has(#register-form) #account form input,
+body:has(#register-form) #account form select,
+body:has(#register-form) #account form textarea {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 13px 14px !important;
+  border: 1px solid #c8dfe2 !important;
+  border-radius: 10px !important;
+  background: #f8fcfc !important;
+}
+
+body:has(#login-form) #account form input:focus,
+body:has(#register-form) #account form input:focus,
+body:has(#register-form) #account form select:focus,
+body:has(#register-form) #account form textarea:focus {
+  outline: 2px solid #78cbd0 !important;
+  border-color: #087e8b !important;
+}
+
+body:has(#login-form) #account form button,
+body:has(#register-form) #account form button {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  border-radius: 10px !important;
+  background: #087e8b !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+body:has(#login-form) #account #create-account-link,
+body:has(#login-form) #account #login-result {
+  text-align: center !important;
+}
+
+@media (max-width: 600px) {
+  body:has(#login-form) #account,
+  body:has(#register-form) #account {
+    min-height: 70vh !important;
+    padding: 30px 14px !important;
+  }
+
+  body:has(#login-form) #account > article:has(#login-form),
+  body:has(#register-form) #account > article:has(#register-form) {
+    padding: 24px 18px !important;
+  }
+}
+/* End shared JalSetu authentication design */
+</style>
+
+
+<style id="jalsetu-wide-auth-inputs">
+/* Center the heading AND the complete form card together */
+body:has(#login-form) #account,
+body:has(#register-form) #account {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+body:has(#login-form) #account .section-heading,
+body:has(#register-form) #account .section-heading {
+  width: 100% !important;
+  max-width: 560px !important;
+  margin: 0 auto 24px !important;
+  text-align: center !important;
+}
+
+body:has(#login-form) #account > article:has(#login-form),
+body:has(#register-form) #account > article:has(#register-form) {
+  float: none !important;
+  position: relative !important;
+  width: min(560px, 100%) !important;
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+body:has(#login-form) #account form input,
+body:has(#register-form) #account form input,
+body:has(#register-form) #account form select,
+body:has(#register-form) #account form textarea {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 15px 16px !important;
+  font-size: 16px !important;
+}
+
+body:has(#login-form) #account form p,
+body:has(#register-form) #account form p {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+</style>
+
+<style id="jalsetu-single-card-centering">
+/* Keep the account heading and the visible form card centered */
+#account.jalsetu-single-card-mode > .section-heading {
+  width: 100% !important;
+  max-width: 560px !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+}
+
+#account.jalsetu-single-card-mode > .grid {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+}
+
+#account.jalsetu-single-card-mode > .grid > article {
+  flex: 0 1 560px !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+}
+</style>
+  <script src="config.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -873,7 +1056,7 @@
 
 
 <script>
-  const API_BASE = "http://localhost:5000";
+  const API_BASE = window.JALSETU_API_BASE;
 
   // Show messages without reloading the page.
   function showMessage(elementId, message, isError = false) {
@@ -977,9 +1160,9 @@
       sessionStorage.setItem("jalsetu_token", data.access_token);
       sessionStorage.setItem("jalsetu_user", JSON.stringify(data.user));
 
-      showMessage("login-result", "Login successful! Opening your dashboard...");
+      showMessage("login-result", "Login successful! Opening JalSetu home...");
       document.getElementById("login-password").value = "";
-      window.location.href = "dashboard.html";
+      window.location.href = "home.html";
     } catch (error) {
       showMessage(
         "login-result",
@@ -998,7 +1181,7 @@
     sessionStorage.removeItem("jalsetu_token");
     sessionStorage.removeItem("jalsetu_user");
 
-    window.location.href = "index.html";
+    window.location.href = "home.html";
   });
 
 
@@ -1387,7 +1570,7 @@
           event.preventDefault();
           sessionStorage.removeItem("jalsetu_token");
           sessionStorage.removeItem("jalsetu_user");
-          location.replace("index.html");
+          location.replace("home.html");
         });
 
         const heading = complaints &&
@@ -1437,6 +1620,7 @@
     const description = account && account.querySelector(".section-heading p");
 
     if (page === "index.html" || page === "login.html") {
+      if (account) account.classList.add("jalsetu-single-card-mode");
       show(registerCard, false);
       show(loginCard, true);
       if (heading) heading.textContent = "Welcome Back";
@@ -1460,6 +1644,7 @@
         '<a href="index.html">Home</a>' +
         '<a href="register.html">Create Account</a>';
     } else {
+      if (account) account.classList.add("jalsetu-single-card-mode");
       show(registerCard, true);
       show(loginCard, false);
       if (heading) heading.textContent = "Create Your JalSetu Account";
@@ -1717,5 +1902,31 @@
 })();
 </script>
 
+
+<script id="jalsetu-global-logout">
+(function () {
+  const nav = document.querySelector(".nav");
+  if (!nav || document.getElementById("jalsetu-global-logout-button")) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.id = "jalsetu-global-logout-button";
+  button.textContent = "Logout";
+  button.setAttribute("aria-label", "Log out of JalSetu");
+  button.style.cssText =
+    "cursor:pointer;border:0;border-radius:10px;padding:10px 16px;" +
+    "font:inherit;font-weight:600;background:#0f766e;color:white;";
+
+  button.addEventListener("click", function () {
+    sessionStorage.removeItem("jalsetu_token");
+    sessionStorage.removeItem("jalsetu_user");
+    window.location.replace("login.html");
+  });
+
+  nav.appendChild(button);
+})();
+</script>
+
+  <script src="chatbot.js" defer></script>
 </body>
 </html>

@@ -198,7 +198,7 @@ def create_app():
         description = str(data.get("description", "")).strip()
         category = str(data.get("category", "")).strip()
         location_text = str(data.get("location_text", "")).strip()
-        image_url = str(data.get("image_url", "")).strip() or None
+        image_url = None  # Images must pass the validated upload flow.
 
         if not title or len(title) > 150:
             return jsonify({"error": "Enter a title of up to 150 characters."}), 400
@@ -531,6 +531,83 @@ def create_app():
                 "total_users": total_users,
             }
         }), 200
+
+
+    @app.post("/api/chat")
+    def chatbot_support():
+        data = request.get_json(silent=True) or {}
+        message = data.get("message", "")
+
+        if not isinstance(message, str) or not message.strip():
+            return jsonify({"error": "Please enter a question."}), 400
+        if len(message) > 1000:
+            return jsonify({"error": "Please keep your question under 1000 characters."}), 400
+
+        q = message.strip().lower()
+
+        if any(word in q for word in ("contaminated", "dirty water", "unsafe water", "bad smell", "पानी गंदा", "दूषित पानी", "घाण पाणी")):
+            answer = (
+                "If water looks, smells, or tastes unusual, avoid drinking or cooking with it "
+                "until your local water authority confirms it is safe. Use a known safe water "
+                "source and report the issue through File a Complaint, choosing Water Quality "
+                "or Contaminated Water. Seek local public-health advice if anyone feels unwell."
+            )
+        elif any(word in q for word in ("leak", "pipeline damage", "burst pipe", "लीकेज", "गळती")):
+            answer = (
+                "For a water leak or damaged pipeline, open Dashboard → File a Complaint, "
+                "select Water Leakage or Pipeline Damage, describe the location, and add a photo "
+                "if safe. Stay away from flooded electrical areas and dangerous road conditions."
+            )
+        elif any(word in q for word in ("low pressure", "pressure", "कम दबाव", "कमी दाब")):
+            answer = (
+                "For low water pressure, note your area, when the issue started, and whether "
+                "neighbours are affected. File a complaint under Low Water Pressure and include "
+                "those details so the responsible team can investigate."
+            )
+        elif any(word in q for word in ("no water", "water cut", "no supply", "पानी नहीं", "पाणी नाही")):
+            answer = (
+                "If there is no water supply, check whether the interruption affects nearby "
+                "homes too. Submit a complaint under No Water Supply with your location and "
+                "the approximate start time. JalSetu cannot confirm a live outage unless that "
+                "information is provided by the responsible authority."
+            )
+        elif any(word in q for word in ("track", "status", "reference", "complaint number", "ट्रैक", "स्थिती")):
+            answer = (
+                "Open Dashboard → Track Complaint and enter the complaint reference number. "
+                "Pending means it is awaiting action, In Progress means it is being handled, "
+                "and Resolved means it has been marked resolved. If you cannot find your "
+                "reference, check the confirmation shown when you submitted the complaint."
+            )
+        elif any(word in q for word in ("file", "submit", "new complaint", "report issue", "शिकायत", "तक्रार")):
+            answer = (
+                "Log in, open Dashboard, and use the complaint form. Enter a clear title, "
+                "select the closest category, describe the issue, provide the location, and "
+                "attach a relevant photo if available. Submit the form and keep the reference "
+                "number for tracking."
+            )
+        elif any(word in q for word in ("login", "log in", "password", "register", "sign up", "account")):
+            answer = (
+                "Use Login if you already have an account, or Register to create one. "
+                "If login fails, check your email and password. Never share your password "
+                "or authentication token in this chat."
+            )
+        elif any(word in q for word in ("hello", "hi", "hey", "नमस्ते", "नमस्कार")):
+            answer = (
+                "Hello! I'm the JalSetu support assistant. I can guide you through filing "
+                "and tracking complaints, account access, water supply interruptions, leaks, "
+                "low pressure, and water quality concerns. What do you need help with?"
+            )
+        elif any(word in q for word in ("thank", "धन्यवाद")):
+            answer = "You're welcome! Ask me if you need help filing or tracking a JalSetu complaint."
+        else:
+            answer = (
+                "I can help with filing a complaint, tracking its status, login and registration, "
+                "no water supply, low pressure, pipeline leakage, and water quality. Try asking "
+                "about one of these topics. This first version uses predefined support guidance "
+                "and does not yet use an AI model or access live complaint records."
+            )
+
+        return jsonify({"answer": answer}), 200
 
     return app
 
